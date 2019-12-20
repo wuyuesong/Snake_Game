@@ -323,6 +323,7 @@ int main()
     int flag;
     flag=replay();
     if (flag)
+
         goto gameStart;
     else
         goto processStart;
