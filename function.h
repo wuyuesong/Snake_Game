@@ -1,7 +1,7 @@
 /*
  *Functions that print option choosing frames
  *and two in-build maps
- *Bug free v0.1.2_stable 
+ *dbb version
  *By SDUST weilinfox
  */
 
@@ -20,7 +20,7 @@ extern int dirp[6];
 int init (void)
 {
     /*init window*/
-    system("title Snake Game v0.1.2【by SDUST weilinfox】");
+    system("title Snake Game v0.1.dbb【by SDUST weilinfox】");
     system("color 0f");
 
     /*reset the size of the window*/
@@ -287,13 +287,15 @@ int chooseMap(void)
     int initSideBar(void);
     system("cls");
     initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2);
+    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
     printf("==========选择地图==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+1);
+    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
     printf("         -> 图一");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+2);
+    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
     printf("            图二");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+3);
+    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
+    printf("            DBB");
+    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
     printf("============================");
 
     while (1) {
@@ -306,7 +308,7 @@ int chooseMap(void)
         case 75:
             mod--;
             if (mod<1)
-                mod=2;
+                mod=3;
             break;
         case 's':
         case 'S':
@@ -315,7 +317,7 @@ int chooseMap(void)
         case 80:
         case 77:
             mod++;
-            if (mod>2)
+            if (mod>3)
                 mod=1;
             break;
         case 13:
@@ -326,23 +328,39 @@ int chooseMap(void)
 
         switch (mod) {
         case 1:
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
             printf("==========选择地图==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+1);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
             printf("         -> 图一");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+2);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
             printf("            图二");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+3);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
+            printf("            DBB");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
             printf("============================");
             break;
         case 2:
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
             printf("==========选择地图==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+1);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
             printf("            图一");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+2);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
             printf("         -> 图二");
-            gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+3);
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
+            printf("            DBB");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
+            printf("============================");
+            break;
+        case 3:
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
+            printf("==========选择地图==========");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
+            printf("            图一");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
+            printf("            图二");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
+            printf("         -> DBB");
+            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
             printf("============================");
             break;
         }
@@ -422,6 +440,56 @@ int setMap (int mode)
             yp[i]=6-i;
         for (i=0; i<6; i++)
             dirp[i]=2;
+        break;
+    case 3:
+        memset(map, 0, sizeof(map));
+        strcpy(&map[((MAP_Y/2)-9)/2][(MAP_X-52)/2],    "######     #####################");
+        strcpy(&map[((MAP_Y/2)-9)/2+1][(MAP_X-52)/2],  "######     #############################");
+        strcpy(&map[((MAP_Y/2)-9)/2+2][(MAP_X-52)/2],  "######     ##################################");
+        strcpy(&map[((MAP_Y/2)-9)/2+3][(MAP_X-52)/2],  "######                             ##############");
+        strcpy(&map[((MAP_Y/2)-9)/2+4][(MAP_X-52)/2],  "######                                   ###########");
+        strcpy(&map[((MAP_Y/2)-9)/2+5][(MAP_X-52)/2],  "######                                       #########");
+        strcpy(&map[((MAP_Y/2)-9)/2+6][(MAP_X-52)/2],  "######          ############                  ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+7][(MAP_X-52)/2],  "######          ###############               ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+8][(MAP_X-52)/2],  "######          ################              ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+9][(MAP_X-52)/2],  "######          ################              ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+10][(MAP_X-52)/2], "######          ###############              ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+11][(MAP_X-52)/2], "######          ############                ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+12][(MAP_X-52)/2], "######                                    ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+13][(MAP_X-52)/2], "######                                  ########");
+        strcpy(&map[((MAP_Y/2)-9)/2+14][(MAP_X-52)/2], "######                    ###################");
+
+        strcpy(&map[MAP_Y/2][(MAP_X-52)/2+14], "###");
+
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)][(MAP_X-52)/2], "######     #####################");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-1][(MAP_X-52)/2], "######     #############################");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-2][(MAP_X-52)/2], "######     ##################################");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-3][(MAP_X-52)/2], "######                             ##############");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-4][(MAP_X-52)/2], "######                                   ###########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-5][(MAP_X-52)/2], "######                                       #########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-6][(MAP_X-52)/2], "######          ############                  ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-7][(MAP_X-52)/2], "######          ###############               ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-8][(MAP_X-52)/2], "######          ################              ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-9][(MAP_X-52)/2], "######          ################              ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-10][(MAP_X-52)/2], "######          ###############              ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-11][(MAP_X-52)/2], "######          ############                ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-12][(MAP_X-52)/2], "######                                    ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-13][(MAP_X-52)/2], "######                                  ########");
+        strcpy(&map[MAP_Y-(((MAP_Y/2)-9)/2)-14][(MAP_X-52)/2], "######                    ###################");
+
+        for (i=0; i<MAP_Y; i++) {
+            for (j=0; j<MAP_X; j++) {
+                if (map[i][j]!='#')
+                    map[i][j]=0;
+            }
+        }
+        for (i=0; i<6; i++)
+            xp[i]=1;
+        for (i=0; i<6; i++)
+            yp[i]=6-i;
+        for (i=0; i<6; i++)
+            dirp[i]=2;
+        break;
     }
 
     return 0;
