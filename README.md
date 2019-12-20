@@ -1,9 +1,11 @@
-# snake panda
+# One-way Listed Link Snake Game
+# 单向链表贪吃蛇 v0.1.2
 
-高中时期改写的贪吃蛇 V2.0
+Use pure C and some windows API
+使用纯 c 和一些 windows API
 
-环境：VC++ 6.0 Windows2000
+Tested on Windows XP, Windows 10。
 
-原始代码来自https://github.com/8bit-Game-Studio/RetroSnaker
 
-鸣谢：EyreFree
+
+By SDUST weilinfox
