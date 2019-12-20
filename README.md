@@ -1,5 +1,5 @@
 # 单向链表贪吃蛇 v0.2.1
-# One-way Listed Link Snake Game v0.2.0
+# One-way Listed Link Snake Game v0.2.1
 
 ## Description
 Use pure C and some windows API.
