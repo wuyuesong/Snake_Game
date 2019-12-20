@@ -1,6 +1,7 @@
 /*
  *Functions that set and print the frame
  *Including maps and side bar
+ *v0.2.0
  *By SDUST weilinfox
  */
 
@@ -22,6 +23,9 @@ extern int dfclevel;
 extern int level;
 /** play time*/
 extern clock_t runtime;
+/** scores*/
+extern strscore score[5];
+
 
 /** relocate cursor*/
 int gotoxy(int x, int y)
@@ -35,6 +39,39 @@ int gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),pos);
 
 	return 0;
+}
+
+int welcome (void)
+{
+    char welcome[15][95]={"                  #############                                             ####            ",
+                        "             ###################                                          ####              ",
+                        "          ######################                                        ####                ",
+                        "         ########         ####                                        #####                 ",
+                        "        ####            ##                                           ####                   ",
+                        "        ###                                             ####       ####                 ### ",
+                        "        ######                           ####        ########     ####   #####       #######",
+                        "          ##########             ###   ######     ####    ###   ####   #######     ###   ###",
+                        "              ##########       ####  #######    ####     ###   ###   ###   ##    ###   ###  ",
+                        "                      ####    ###  ###  ##    ###      ###    ###  ###   ##     ###  ##     ",
+                        "                        ###  ### ###   ##    ###     ####    ### ####  ##      #####     #  ",
+                        "  ###               ######    ####   ######  ######## ###### ####   ########   #####   ##   ",
+                        " #######################            ####      ###    ####     #      ####       #######     ",
+                        "   ##################                                                  By weilinfox         ",
+                        "                                          Data loaded successfully...                       "};
+
+    int i, j;
+    int len=strlen(welcome[0]);
+
+    for (i=0; welcome[0][i]!='\0'; i++) {
+        for (j=0; j<15; j++) {
+            gotoxy((MAP_X-len+15)/2+i+1, (MAP_Y-15)/2+j+1);
+            putchar(welcome[j][i]);
+        }
+        Sleep(10);
+    }
+    Sleep(1500);
+
+    return 0;
 }
 
 /** get a frame*/
@@ -88,9 +125,31 @@ int printFrame (char frame[][MAP_X])
         }
     }
 
-    /*gotoxy(1, MAP_Y);
-    printf(" %d %d %d %d", (x-1<0?0:x-1), (x1+1>MAP_X-1?MAP_X-1:x1+1), (y-1<0?0:y-1), (y1+1>MAP_Y-1?MAP_Y-1:y1+1));
-    getch();*/
+    /*avoid eat too much*/
+    if (y-1<0) {
+        gotoxy(1, MAP_Y);
+        for (i=0; i<MAP_X; i++) {
+            putchar(frame[MAP_Y-1][i]);
+        }
+    }
+    if (y1+1>MAP_Y-1) {
+        gotoxy(1, 1);
+        for (i=0; i<MAP_X; i++) {
+            putchar(frame[0][i]);
+        }
+    }
+    if (x-1<0) {
+        for (i=1; i<=MAP_Y; i++) {
+            gotoxy(MAP_X, i);
+            putchar(frame[i-1][MAP_X-1]);
+        }
+    }
+    if (x1+1>MAP_X-1) {
+        for (i=1; i<=MAP_Y; i++) {
+            gotoxy(1, i);
+            putchar(frame[i-1][0]);
+        }
+    }
 
     return 0;
 }
@@ -195,4 +254,52 @@ int printSideBarInfo (void)
         printf("%d", (length-5)*2);
 
         return 0;
+}
+
+int printLittleSideBarInfo (void)
+{
+    gotoxy(MAP_X+12, 5);
+    printf("%d", dfclevel);
+    gotoxy(MAP_X+12, 7);
+    printf("%d", level);
+    gotoxy(MAP_X+12, 9);
+    printf("%d", mapNo);
+    gotoxy(MAP_X+12, 11);
+    if (win)
+        printf("Common");
+    else
+        printf("Compete");
+
+        return 0;
+}
+
+int showRank (void)
+{
+    int readLogFile (void);
+    system("cls");
+    initSideBar();
+    printLittleSideBarInfo();
+
+    readLogFile();
+
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2);
+    printf("========昵称========  =成绩=  =等级=  =地图=");
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+2);
+    printf("%-20s  %-6d  %-6d  %-6d", score[0].name, score[0].score, score[0].dfclevel, score[0].map);
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+3);
+    printf("%-20s  %-6d  %-6d  %-6d", score[1].name, score[1].score, score[1].dfclevel, score[1].map);
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+4);
+    printf("%-20s  %-6d  %-6d  %-6d", score[2].name, score[2].score, score[2].dfclevel, score[2].map);
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+5);
+    printf("%-20s  %-6d  %-6d  %-6d", score[3].name, score[3].score, score[3].dfclevel, score[3].map);
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+6);
+    printf("%-20s  %-6d  %-6d  %-6d", score[4].name, score[4].score, score[4].dfclevel, score[4].map);
+
+    gotoxy((MAP_X-44)/2, (MAP_Y-7)/2+8);
+    printf("Press any key to continue...");
+
+    getchar();
+    getchar();
+
+    return 0;
 }

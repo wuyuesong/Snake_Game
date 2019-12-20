@@ -1,8 +1,17 @@
 /*
  *Establish snake using One-way linked list
  *This file including functions that set up and delete the linked list
+ *v0.2.0
  *By SDUST weilinfox
  */
+
+/** definition of strscore*/
+typedef struct sscr {
+    char name[25];
+    int dfclevel;
+    int score;
+    int map;
+} strscore;
 
 /** Attribute of snake body node*/
 typedef struct body {

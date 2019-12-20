@@ -1,7 +1,7 @@
 /*
- *Functions that print option choosing frames
- *and two in-build maps
- *dbb version
+ *Useful functions and
+ *three in-build maps
+ *0.2.0 version
  *By SDUST weilinfox
  */
 
@@ -14,13 +14,26 @@ extern int xp[6];
 extern int yp[6];
 /** up1 down2 left3 right 4*/
 extern int dirp[6];
+/** play mode 0:never win*/
+extern int win;
+/** map no*/
+extern int mapNo;
+/** difficult level*/
+extern int dfclevel;
+/** Speed level*/
+extern int level;
+/** scores*/
+extern strscore score[5];
 
 
-/** initialize window*/
+/** initialize window and mode variables*/
 int init (void)
 {
+    int setMap (int);
+    int readModeFile (void);
+    int readLogFile (void);
     /*init window*/
-    system("title Snake Game v0.1.dbb【by SDUST weilinfox】");
+    system("title Snake Game v0.2.0【by SDUST weilinfox】");
     system("color 0f");
 
     /*reset the size of the window*/
@@ -33,6 +46,30 @@ int init (void)
     /*hide cursor*/
     CONSOLE_CURSOR_INFO cursor_info = {1, 0};
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
+
+	/*read configure file*/
+	readModeFile();
+	readLogFile();
+
+    return 0;
+}
+
+/** first load welcome*/
+int firstLoad(void)
+{
+    int gotoxy(int, int);
+    gotoxy(1, 10);
+    printf("               看来这是你第一次运行这个程序。\n"
+           "               我不保证这个程序不会怼坏你的内存、吓晕你的猫猫，或者干出别的出格的事情。\n"
+           "               但是它确实会生成配置文件，放在和这个程序同个目录里。\n"
+           "               通常它是安全的，但若真的有什么不好的事情发生了，请告诉我。万分感谢!\n"
+           "               如果有杀毒软件报毒，那你确实得考虑要不要卸了它。\n"
+           "               毕竟，你只运行了一个我写的软件，它误报了，误报率 100%% 真是让人不敢恭维呢。\n"
+           "               手动滑稽\n\n"
+           "                                                            ——一只整天不知道干啥的狸\n\n\n\n\n"
+           "               Press any key to continue...");
+    getchar();
+    getchar();
 
     return 0;
 }
@@ -56,326 +93,68 @@ int judge (void)
     return 0;
 }
 
-/** replay the game*/
-int replay(void)
+/** judge whether break a recored*/
+int brRecord (int lev, int s)
 {
-    int initSideBar(void);
-    char ch;
-    system("cls");
-    initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2);
-    printf("==========重玩卡关==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+1);
-    printf("          重玩(Y)");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+2);
-    printf("      任意键返回主界面");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+3);
-    printf("============================");
-    while (!kbhit()) ;
-    ch=getch();
-    if (ch=='y' || ch=='Y')
+    if (s>score[4].score)
+        return 1;
+    else if (s==score[4].score && s!=0 && lev>score[4].dfclevel)
         return 1;
     else
         return 0;
 }
 
-/** confirm quit*/
-int quitConfirm(void)
+/** save a recored*/
+int saveRecord(int lev, int s, int map)
 {
-    char ch;
     int initSideBar(void);
-    system("cls");
-    initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2);
-    printf("==========确认退出==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+1);
-    printf("           退出(Y)");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+2);
-    printf("         任意键取消");
-    gotoxy((MAP_X-28)/2, (MAP_Y-4)/2+3);
-    printf("============================");
-    while (!kbhit()) ;
-    ch=getch();
-    if (ch=='y' || ch=='Y')
-        exit(0);
-    else
-        return 0;
-}
-
-/** choose game's level*/
-int chooseLevel(void)
-{
-    int lev=2;
-    char ch;
-    int initSideBar(void);
-    system("cls");
-    initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-    printf("==========选择难度==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-    printf("            简单");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-    printf("         -> 普通");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-    printf("            困难");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-    printf("============================");
-
-    while (1) {
-        switch (ch=getch()) {
-        case 'w':
-        case 'W':
-        case 'a':
-        case 'A':
-        case 72:
-        case 75:
-            lev--;
-            if (lev<1)
-                lev=3;
+    int gotoxy(int, int);
+    int saveLogFile (void);
+    int i;
+    for (i=4; i>0; i--) {
+        if (s>score[i-1].score ||
+            (s==score[i-1].score && lev>score[i].dfclevel)) {
+            score[i].score=score[i-1].score;
+            score[i].dfclevel=score[i-1].dfclevel;
+            score[i].map=score[i-1].map;
+            strcpy(score[i].name, score[i-1].name);
+        } else
             break;
-        case 's':
-        case 'S':
-        case 'd':
-        case 'D':
-        case 80:
-        case 77:
-            lev++;
-            if (lev>3)
-                lev=1;
-            break;
-        case 13:
-            return lev;
-        }
-
-        switch (lev) {
-        case 1:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择难度==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("         -> 简单");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            困难");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 2:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择难度==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            简单");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("         -> 普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            困难");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 3:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择难度==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            简单");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("         -> 困难");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        }
     }
-}
+    score[i].score=s;
+    score[i].dfclevel=lev;
+    score[i].map=map;
 
-int mode (void)
-{
-    int mod=1;
-    char ch;
-    int initSideBar(void);
-    int quitConfirm(void);
-    int mode (void);
     system("cls");
     initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-    printf("==========选择模式==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-    printf("         -> 普通");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-    printf("            竞技");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-    printf("            退出");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
+
+    gotoxy((MAP_X-28)/2, (MAP_Y-3)/2);
+    printf("============昵称============");
+    gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+1);
+    putchar('>');
+    gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+2);
     printf("============================");
+    gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+3);
+    printf("请输入少于 20 个字母或 10 个汉字");
 
-    while (1) {
-        switch (ch=getch()) {
-        case 'w':
-        case 'W':
-        case 'a':
-        case 'A':
-        case 72:
-        case 75:
-            mod--;
-            if (mod<1)
-                mod=3;
-            break;
-        case 's':
-        case 'S':
-        case 'd':
-        case 'D':
-        case 80:
-        case 77:
-            mod++;
-            if (mod>3)
-                mod=1;
-            break;
-        case 13:
-            if (mod==3) {
-                quitConfirm();
-                mode();
-            } else
-                return mod==1?1:0;
-        }
+    gotoxy((MAP_X-28)/2+3, (MAP_Y-3)/2+1);
+    scanf("%s", score[i].name);
+    score[i].name[20]='\0';
 
-        switch (mod) {
-        case 1:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择模式==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("         -> 普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            竞技");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            退出");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 2:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择模式==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("         -> 竞技");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            退出");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 3:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择模式==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            普通");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            竞技");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("         -> 退出");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        }
-    }
-}
-
-int chooseMap(void)
-{
-    int setMap (int);
-    int mod=1;
-    char ch;
-    int initSideBar(void);
-    system("cls");
-    initSideBar();
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-    printf("==========选择地图==========");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-    printf("         -> 图一");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-    printf("            图二");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-    printf("            DBB");
-    gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-    printf("============================");
-
-    while (1) {
-        switch (ch=getch()) {
-        case 'w':
-        case 'W':
-        case 'a':
-        case 'A':
-        case 72:
-        case 75:
-            mod--;
-            if (mod<1)
-                mod=3;
-            break;
-        case 's':
-        case 'S':
-        case 'd':
-        case 'D':
-        case 80:
-        case 77:
-            mod++;
-            if (mod>3)
-                mod=1;
-            break;
-        case 13:
-            mapNo=mod;
-            setMap(mod);
-            return 0;
-        }
-
-        switch (mod) {
-        case 1:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择地图==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("         -> 图一");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            图二");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            DBB");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 2:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择地图==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            图一");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("         -> 图二");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("            DBB");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        case 3:
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2);
-            printf("==========选择地图==========");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+1);
-            printf("            图一");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+2);
-            printf("            图二");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+3);
-            printf("         -> DBB");
-            gotoxy((MAP_X-28)/2, (MAP_Y-5)/2+4);
-            printf("============================");
-            break;
-        }
-    }
+    saveLogFile();
 
     return 0;
 }
 
+/** initialize map and set "step"*/
 int setMap (int mode)
 {
     int i, j;
+    int readMapFile (void);
+    memset(map, 0, sizeof(map));
 
     switch (mode) {
     case 1:
-        memset(map, 0, sizeof(map));
         for (i=0; i<MAP_X; i++){
             map[0][i]='#';
             map[MAP_Y-1][i]='#';
@@ -393,7 +172,6 @@ int setMap (int mode)
         step=1;
         break;
     case 2:
-        memset(map, 0, sizeof(map));
         strcpy(&map[((MAP_Y/2)-9)/2][(MAP_X-60)/2], "####################                    ####################");
         strcpy(&map[((MAP_Y/2)-9)/2+1][(MAP_X-60)/2], "####################                    ####################");
         strcpy(&map[((MAP_Y/2)-9)/2+2][(MAP_X-60)/2], "####################                    ####################");
@@ -440,9 +218,9 @@ int setMap (int mode)
             yp[i]=6-i;
         for (i=0; i<6; i++)
             dirp[i]=2;
+        step=0;
         break;
     case 3:
-        memset(map, 0, sizeof(map));
         strcpy(&map[((MAP_Y/2)-9)/2][(MAP_X-52)/2],    "######     #####################");
         strcpy(&map[((MAP_Y/2)-9)/2+1][(MAP_X-52)/2],  "######     #############################");
         strcpy(&map[((MAP_Y/2)-9)/2+2][(MAP_X-52)/2],  "######     ##################################");
@@ -489,6 +267,25 @@ int setMap (int mode)
             yp[i]=6-i;
         for (i=0; i<6; i++)
             dirp[i]=2;
+        step=0;
+        break;
+    case 4:
+        readMapFile();
+        for (i=0; i<MAP_Y; i++) {
+            for (j=0; j<MAP_X; j++) {
+                if (map[i][j]==' ')
+                    map[i][j]=0;
+                else if (isprint(map[i][j]))
+                    map[i][j]='#';
+            }
+        }
+        for (i=0; i<6; i++)
+            xp[i]=1;
+        for (i=0; i<6; i++)
+            yp[i]=6-i;
+        for (i=0; i<6; i++)
+            dirp[i]=2;
+        step=0;
         break;
     }
 

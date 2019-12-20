@@ -1,5 +1,5 @@
 /*
- *One-way Listed Link Snake Game v0.1.1
+ *One-way Listed Link Snake Game v0.2.0
  *Using pure C and some windows API
  *By SDUST weilinfox
  */
@@ -7,32 +7,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
+
 #include "snake.h"
 #include "frame.h"
+#include "menu.h"
 #include "function.h"
+#include "file.h"
 
 /** Speed level*/
-int level=2;
+int level;
 /** difficult level*/
-int dfclevel=2;
+int dfclevel;
 /** accelerate when get half of the score*/
-int step=0;
+int step;
 /** play mode 0:never win*/
-int win=1;
+int win;
 /** map no*/
-int mapNo=0;
+int mapNo;
 /** play time*/
-clock_t runtime=0;
+clock_t runtime;
+
+/** scores*/
+strscore score[5];
 
 /** Size of the map*/
 char map[MAP_Y][MAP_X];
 char frame[MAP_Y][MAP_X];
 
 /** Attribute of snake body*/
-int length=0;
+int length;
 snakeBodyNode* head=NULL;
 snakeBodyNode* tail=NULL;
 
@@ -46,24 +53,28 @@ int dirp[6];
 int foodX, foodY;
 int foodF=0;
 
+/** time control*/
+long long playTime;
+
 
 int main()
 {
     int i, j;
-    int countMSecond, foodMSecond, run=1;
-    long long playTime=0;
+    int countMSecond, foodMSecond, run;
+    int replayTime=0;
     char ch;
 
     processStart:
     /*start*/
     init();
+    if (!replayTime)
+        welcome();
+    replayTime++;
 
-    /*setup map and init snake*/
-    mode();
-    chooseMap();
+    /*main menu*/
+    mainMenu();
 
-    dfclevel=level=chooseLevel();
-
+    /* gameStart*/
     gameStart:
     system("cls");
     initSideBar();
@@ -302,20 +313,28 @@ int main()
     }
 
     gotoxy(1, MAP_Y+1);
-    if (!run && length<=40) {
+    if (!run && length<=40 && win) {
         system("color 0f");
         printf("Game over!\n\n\n\n\n");
+        Sleep(1500);
     } else if (!win) {
         system("color 0f");
-        printf("I believe you will make a difference!\n\n\n\n\n");
+        printf("I believe you will make a difference!\n");
+        if (brRecord(dfclevel, (length-5)*2)) {
+            printf("You have break a recored!!!!!\n!!!!!\n!!!!!\nJust wait a minute.\n");
+            saveRecord(dfclevel, (length-5)*2, mapNo);
+        } else {
+            printf("\n\n\n\n");
+            Sleep(1500);
+        }
     }
-    Sleep(1500);
 
     freeSnake(head);
 
     if (length>40 && win && dfclevel<3) {
         dfclevel++;
         printf("Upgraded!\n\n\n");
+        saveModeFile();
         Sleep(500);
         goto gameStart;
     }
