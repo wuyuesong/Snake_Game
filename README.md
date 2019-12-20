@@ -1,4 +1,4 @@
-# 单向链表贪吃蛇 v0.2.0
+# 单向链表贪吃蛇 v0.2.1
 # One-way Listed Link Snake Game v0.2.0
 
 ## Description
@@ -52,3 +52,6 @@ By SDUST weilinfox
 + 增加 complete 模式排行榜
 + 增加欢迎界面
 + 修复部分 bug
+
+0.2.1 2019-12-21
++ 预备修复 bug
