@@ -2,6 +2,7 @@
  *Useful functions and
  *three in-build maps
  *0.3.0 version
+ *For linux
  *By SDUST weilinfox
  */
 
@@ -32,20 +33,19 @@ int init (void)
     int setMap (int);
     int readModeFile (void);
     int readLogFile (void);
-    /*init window*/
+    /*init window
     system("title Snake Game v0.2.0¡¾by SDUST weilinfox¡¿");
-    system("color 0f");
+    system("color 0f");*/
 
-    /*reset the size of the window*/
+    /*reset the size of the window
     char com[50]="mode con cols=";
     strcat(com, MAP_X_C);
     strcat(com, " lines=");
     strcat(com, MAP_Y_C);
-    system(com);
+    system(com);*/
 
     /*hide cursor*/
-    CONSOLE_CURSOR_INFO cursor_info = {1, 0};
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
+    system("echo -e \"\\033[?25l\"");
 
 	/*read configure file*/
 	readModeFile();
@@ -96,7 +96,7 @@ int welcome (void)
     int i, j;
     int len=strlen(welcome[0]);
 
-    system("cls");
+    system("clear");
     for (i=0; welcome[0][i]!='\0'; i++) {
         for (j=0; j<15; j++) {
             gotoxy((MAP_X-len+15)/2+i+1, (MAP_Y-15)/2+j+1);
@@ -160,7 +160,7 @@ int saveRecord(int lev, int s, int map)
     score[i].dfclevel=lev;
     score[i].map=map;
 
-    system("cls");
+    system("clear");
     initSideBar();
 
     gotoxy((MAP_X-28)/2, (MAP_Y-3)/2);

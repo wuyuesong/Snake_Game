@@ -1,5 +1,5 @@
-# 单向链表贪吃蛇 v0.2.1
-# One-way Listed Link Snake Game v0.2.0
+# 单向链表贪吃蛇 v0.3.0
+# One-way Listed Link Snake Game v0.3.0
 
 ## Description
 Use pure C and some windows API.
@@ -21,6 +21,7 @@ By SDUST weilinfox
 2019-12-08 开始 0.1.3 版本编写
 2019-12-13 0.1.3 版本功能冻结
 2019.12.14 0.2.0 版本冻结
+2019.12.21 0.3.0 开始编写
 
 ## Change log
 0.0.0 2019-12-07
@@ -48,10 +49,14 @@ By SDUST weilinfox
 + 修复部分 bug
 
 0.2.0 2019-12-14
-
 + 增加 complete 模式排行榜
 + 增加欢迎界面
 + 修复部分 bug
 
 0.2.1 2019-12-21
 + 预备修复 bug
+
+0.3.0 2019-12-21
++ 增添跨平台特性
++ 修复电源设置可能造成的运行速度 bug
++ ~~linux 平台正常编译运行~~

@@ -1,6 +1,7 @@
 /*
- *One-way Listed Link Snake Game v0.2.0
- *Using pure C and some windows API
+ *One-way Listed Link Snake Game v0.3.0
+ *Using pure C, some windows API, and ncurses
+ *Cross platform
  *By SDUST weilinfox
  */
 
@@ -8,15 +9,30 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <time.h>
-#include <conio.h>
-#include <windows.h>
 
 #include "snake.h"
-#include "frame.h"
-#include "menu.h"
-#include "function.h"
-#include "file.h"
+#include "times.h"
+
+#ifdef WIN32
+	#include <conio.h>
+	#include <windows.h>
+	#include "frame.h"
+	#include "menu.h"
+	#include "function.h"
+	#include "file.h"
+#endif
+#ifndef WIN32
+	#include <ncurses.h>
+	#include "nframe.h"
+	#include "nmenu.h"
+	#include "nfunction.h"
+	#include "nfile.h"
+#endif
+
+/*try to cross platform*/
+#ifndef WIN32
+	#define cls clear
+#endif
 
 /** Speed level*/
 int level;
@@ -93,7 +109,9 @@ int main()
     /*init srand*/
     srand((unsigned int)time(0));
 
-    system("color f0");
+	#ifdef WIN32
+	    system("color f0");
+	#endif
 
 	gotoxy(1,1);
     getFrame(frame, map, head);
@@ -217,7 +235,9 @@ int main()
                     head->x=0;
                 break;
             default:
+            	#ifdef WIN32 
                 MessageBox(NULL,"Undefined direction at running!","ERROR!",MB_OK);
+                #endif
                 exit(1);
             }
             while (node!=NULL) {
@@ -293,8 +313,10 @@ int main()
                     tail->y=preNode->y;
                     break;
                 default:
+                	#ifdef WIN32
                     MessageBox(NULL,"Undefined direction at adding node!","ERROR!",MB_OK);
-                    exit(1);
+                    #endif
+					exit(1);
                 }
             }
             printSideBarInfo();
@@ -302,7 +324,7 @@ int main()
 
         /*printf("%lld", playTime);
         printf("\n\n");*/
-        Sleep(1);
+        sleepms(1);
 
         if (length>40 && win) {
             system("color 0f");
@@ -316,7 +338,7 @@ int main()
     if (!run && length<=40 && win) {
         system("color 0f");
         printf("Game over!\n\n\n\n\n");
-        Sleep(1500);
+        sleepms(1500);
     } else if (!win) {
         system("color 0f");
         printf("I believe you will make a difference!\n");
@@ -325,7 +347,7 @@ int main()
             saveRecord(dfclevel, (length-5)*2, mapNo);
         } else {
             printf("\n\n\n\n");
-            Sleep(1500);
+            sleepms(1500);
         }
     }
 
@@ -335,7 +357,7 @@ int main()
         dfclevel++;
         printf("Upgraded!\n\n\n");
         saveModeFile();
-        Sleep(500);
+        sleepms(500);
         goto gameStart;
     }
 
