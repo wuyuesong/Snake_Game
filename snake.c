@@ -293,9 +293,7 @@ int main()
                     tail->y=preNode->y;
                     break;
                 default:
-                	#ifdef WIN32
                     MessageBox(NULL,"Undefined direction at adding node!","ERROR!",MB_OK);
-                    #endif
 					exit(1);
                 }
             }

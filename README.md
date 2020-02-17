@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # 单向链表贪吃蛇 v0.3.0
 # One-way Listed Link Snake Game v0.3.0
+=======
+# 单向链表贪吃蛇 v0.2.1
+# One-way Listed Link Snake Game v0.2.1
+>>>>>>> fcce914c4a401920732fd2ece09ebf0dcdeb4b66
 
 ## Description
 Use pure C and some windows API.
@@ -14,6 +19,7 @@ Tested on Windows XP, Windows 10， Wine.
 By SDUST weilinfox
 
 ## Release note
+<<<<<<< HEAD
 2019-12-07 第一个测试版本 0.1.2_tested
 2019-12-08 第一个 bug free 版本 0.1.2_stable
 2019-12-08 第一个定制版本 0.1.dbb
@@ -22,6 +28,15 @@ By SDUST weilinfox
 2019-12-13 0.1.3 版本功能冻结
 2019.12.14 0.2.0 版本冻结
 2019.12.21 0.3.0 开始编写
+=======
++ 2019-12-07 第一个测试版本 0.1.2_tested
++ 2019-12-08 第一个 bug free 版本 0.1.2_stable
++ 2019-12-08 第一个定制版本 0.1.dbb
++ 2019-12-08 发现 360 误报毒
++ 2019-12-08 开始 0.1.3 版本编写
++ 2019-12-13 0.1.3 版本功能冻结
++ 2019.12.14 0.2.0 版本冻结
+>>>>>>> fcce914c4a401920732fd2ece09ebf0dcdeb4b66
 
 ## Change log
 0.0.0 2019-12-07
@@ -55,6 +70,9 @@ By SDUST weilinfox
 
 0.2.1 2019-12-21
 + 预备修复 bug
+<<<<<<< HEAD
 
 0.3.0 2019-12-21
 + 尝试修复电源设置可能造成的运行速度 bug
+=======
+>>>>>>> fcce914c4a401920732fd2ece09ebf0dcdeb4b66
