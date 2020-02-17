@@ -1,7 +1,6 @@
 /*
  *One-way Listed Link Snake Game v0.3.0
- *Using pure C, some windows API, and ncurses
- *Cross platform
+ *Using pure C, some windows API
  *By SDUST weilinfox
  */
 
@@ -12,27 +11,12 @@
 
 #include "snake.h"
 #include "times.h"
-
-#ifdef WIN32
-	#include <conio.h>
-	#include <windows.h>
-	#include "frame.h"
-	#include "menu.h"
-	#include "function.h"
-	#include "file.h"
-#endif
-#ifndef WIN32
-	#include <ncurses.h>
-	#include "nframe.h"
-	#include "nmenu.h"
-	#include "nfunction.h"
-	#include "nfile.h"
-#endif
-
-/*try to cross platform*/
-#ifndef WIN32
-	#define cls clear
-#endif
+#include <conio.h>
+#include <windows.h>
+#include "frame.h"
+#include "menu.h"
+#include "function.h"
+#include "file.h"
 
 /** Speed level*/
 int level;
@@ -109,9 +93,7 @@ int main()
     /*init srand*/
     srand((unsigned int)time(0));
 
-	#ifdef WIN32
-	    system("color f0");
-	#endif
+	system("color f0");
 
 	gotoxy(1,1);
     getFrame(frame, map, head);
@@ -235,9 +217,7 @@ int main()
                     head->x=0;
                 break;
             default:
-            	#ifdef WIN32 
                 MessageBox(NULL,"Undefined direction at running!","ERROR!",MB_OK);
-                #endif
                 exit(1);
             }
             while (node!=NULL) {
