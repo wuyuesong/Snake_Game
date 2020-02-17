@@ -1,36 +1,33 @@
-# 单向链表贪吃蛇 v0.3.0
-# One-way Listed Link Snake Game v0.3.0
+# 单向链表贪吃蛇 v0.3.0 for Linux
+# One-way Listed Link Snake Game v0.3.0 for Linux
 
 ## Description
-Use pure C and some windows API.
-使用纯 c 和一些 windows API。
+Use pure C and ncurses.
+使用纯 c 和 ncurses。
 
-Tested on Windows XP, Windows 10， Wine.
-已经测试正常的平台：Windows XP，Windows 10，Wine。
+Tested on Fedora28, Windows10 WSL.
+已经测试正常的平台：Fedora28，Windows10 WSL。
 
-笔记本建议将电池模式改为最佳性能，以防速度控制异常。
+依赖 ncurses 库
+编译命令：gcc snake.c -lncursesw -o snake
+注意使用 -lncursesw 否则会出现中文乱码 
+
+笔记本电池模式导致的速度控制异常已经修复。
 会在程序当前目录产生三个配置文件
+由于 Linux 下没有 kbhit() 函数，其代码来源于网络。
 
 By SDUST weilinfox
 
 ## Release note
 2019-12-07 第一个测试版本 0.1.2_tested
-
 2019-12-08 第一个 bug free 版本 0.1.2_stable
-
 2019-12-08 第一个定制版本 0.1.dbb
-
 2019-12-08 发现 360 误报毒
-
 2019-12-08 开始 0.1.3 版本编写
-
 2019-12-13 0.1.3 版本功能冻结
-
 2019.12.14 0.2.0 版本冻结
-
 2019.12.21 0.3.0 开始编写
-
-2020.02.27 0.3.0 for Linux 完成
+2020.02.17 0.3.0 for Linux 完成
 
 ## Change log
 0.0.0 2019-12-07
@@ -66,9 +63,8 @@ By SDUST weilinfox
 + 预备修复 bug
 
 0.3.0 2019-12-21
++ 修复电源设置可能造成的运行速度 bug
 
-+ 尝试修复电源设置可能造成的运行速度 bug
+0.3.0 for Linux 2020-2-17
++ 通过 ncurses 支持 Linux
 
-0.3.0 2019-02-17
-
-+ Linux 版完成
