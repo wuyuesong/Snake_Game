@@ -1,5 +1,5 @@
 # 单向链表贪吃蛇 v0.3.1 for Linux
-# One-way Listed Link Snake Game v0.3.0 for Linux
+# One-way Listed Link Snake Game v0.3.1 for Linux
 
 ## Description
 Use pure C and ncurses.
