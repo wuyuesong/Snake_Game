@@ -1,14 +1,16 @@
-# 单向链表贪吃蛇 v0.3.0
-# One-way Listed Link Snake Game v0.3.0
+# 单向链表贪吃蛇 v0.3.1
+# One-way Listed Link Snake Game v0.3.1
 
 ## Description
 Use pure C and some windows API.
 使用纯 c 和一些 windows API。
 
-Tested on Windows XP, Windows 10， Wine.
-已经测试正常的平台：Windows XP，Windows 10，Wine。
+Linux 版使用 ncurses，源码放在专门的文件夹中。
 
-笔记本建议将电池模式改为最佳性能，以防速度控制异常。
+Tested on Windows XP, Windows 10， Wine，Fedora28，Windows10 WSL.
+已经测试正常的平台：Windows XP，Windows 10，Wine，Fedora28，Windows10 WSL。
+
+Windows 笔记本建议将电池模式改为最佳性能，以防速度控制异常。
 会在程序当前目录产生三个配置文件
 
 By SDUST weilinfox
@@ -30,7 +32,9 @@ By SDUST weilinfox
 
 2019.12.21 0.3.0 开始编写
 
-2020.02.27 0.3.0 for Linux 完成
+2020.02.17 0.3.0 for Linux 完成
+
+2020.02.21 0.3.1 for Linux
 
 ## Change log
 0.0.0 2019-12-07
@@ -63,12 +67,11 @@ By SDUST weilinfox
 + 修复部分 bug
 
 0.2.1 2019-12-21
-+ 预备修复 bug
++ 修复 bug
 
-0.3.0 2019-12-21
-
-+ 尝试修复电源设置可能造成的运行速度 bug
-
-0.3.0 2019-02-17
-
+0.3.0 2020-02-17
 + Linux 版完成
+
+0.3.1 2020-02-21
++ 修复 Linux 版部分bug
++ 优化 Linux 版部分菜单

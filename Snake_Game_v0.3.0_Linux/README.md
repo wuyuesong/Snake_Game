@@ -12,7 +12,6 @@ Tested on Fedora28, Windows10 WSL.
 编译命令：gcc snake.c -lncursesw -o snake
 注意使用 -lncursesw 否则会出现中文乱码 
 
-笔记本电池模式导致的速度控制异常已经修复。
 会在程序当前目录产生三个配置文件
 由于 Linux 下没有 kbhit() 函数，其代码来源于网络。
 
