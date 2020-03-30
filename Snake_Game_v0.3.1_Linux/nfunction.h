@@ -2,6 +2,7 @@
  *Useful functions and
  *three in-build maps
  *0.3.0 version
+ *For linux
  *By SDUST weilinfox
  */
 
@@ -32,20 +33,9 @@ int init (void)
     int setMap (int);
     int readModeFile (void);
     int readLogFile (void);
-    /*init window*/
-    system("title Snake Game v0.2.0¡¾by SDUST weilinfox¡¿");
-    system("color 0f");
-
-    /*reset the size of the window*/
-    char com[50]="mode con cols=";
-    strcat(com, MAP_X_C);
-    strcat(com, " lines=");
-    strcat(com, MAP_Y_C);
-    system(com);
 
     /*hide cursor*/
-    CONSOLE_CURSOR_INFO cursor_info = {1, 0};
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
+    curs_set(0); 
 
 	/*read configure file*/
 	readModeFile();
@@ -59,17 +49,18 @@ int firstLoad(void)
 {
     int gotoxy(int, int);
     gotoxy(1, 10);
-    printf("               ¿´À´ÕâÊÇÄãµÚÒ»´ÎÔËĞĞÕâ¸ö³ÌĞò¡£\n"
-           "               ÎÒ²»±£Ö¤Õâ¸ö³ÌĞò²»»áí¡»µÄãµÄÄÚ´æ¡¢ÏÅÔÎÄãµÄÃ¨Ã¨£¬»òÕß¸É³ö±ğµÄ³ö¸ñµÄÊÂÇé¡£\n"
-           "               µ«ÊÇËüÈ·Êµ»áÉú³ÉÅäÖÃÎÄ¼ş£¬·ÅÔÚºÍÕâ¸ö³ÌĞòÍ¬¸öÄ¿Â¼Àï¡£\n"
-           "               Í¨³£ËüÊÇ°²È«µÄ£¬µ«ÈôÕæµÄÓĞÊ²Ã´²»ºÃµÄÊÂÇé·¢ÉúÁË£¬Çë¸æËßÎÒ¡£Íò·Ö¸ĞĞ»!\n"
-           "               Èç¹ûÓĞÉ±¶¾Èí¼ş±¨¶¾£¬ÄÇÄãÈ·ÊµµÃ¿¼ÂÇÒª²»ÒªĞ¶ÁËËü¡£\n"
-           "               ±Ï¾¹£¬ÄãÖ»ÔËĞĞÁËÒ»¸öÎÒĞ´µÄÈí¼ş£¬ËüÎó±¨ÁË£¬Îó±¨ÂÊ 100%% ÕæÊÇÈÃÈË²»¸Ò¹§Î¬ÄØ¡£\n"
-           "               ÊÖ¶¯»¬»ü\n\n"
-           "                                                            ¡ª¡ªÒ»Ö»ÕûÌì²»ÖªµÀ¸ÉÉ¶µÄÀê\n\n\n\n\n"
+    printw("               çœ‹æ¥è¿™æ˜¯ä½ ç¬¬ä¸€æ¬¡è¿è¡Œè¿™ä¸ªç¨‹åº\n"
+           "               æˆ‘ä¸ä¿è¯è¿™ä¸ªç¨‹åºä¸ä¼šæ€¼åä½ çš„å†…å­˜ã€å“æ™•ä½ çš„çŒ«çŒ«ï¼Œæˆ–è€…å¹²å‡ºåˆ«çš„å‡ºæ ¼çš„äº‹æƒ…ã€‚\n"
+           "               ä½†æ˜¯å®ƒç¡®å®ä¼šç”Ÿæˆé…ç½®æ–‡ä»¶ï¼Œæ”¾åœ¨å’Œè¿™ä¸ªç¨‹åºåŒä¸ªç›®å½•é‡Œã€‚\n"
+           "               é€šå¸¸å®ƒæ˜¯å®‰å…¨çš„ï¼Œä½†è‹¥çœŸçš„æœ‰ä»€ä¹ˆä¸å¥½çš„äº‹æƒ…å‘ç”Ÿäº†ï¼Œè¯·å‘Šè¯‰æˆ‘ã€‚ä¸‡åˆ†æ„Ÿè°¢!\n"
+           "               å¦‚æœæœ‰æ€æ¯’è½¯ä»¶æŠ¥æ¯’ï¼Œé‚£ä½ ç¡®å®å¾—è€ƒè™‘è¦ä¸è¦å¸äº†å®ƒã€‚\n"
+           "               æ¯•ç«Ÿï¼Œä½ åªè¿è¡Œäº†ä¸€ä¸ªæˆ‘å†™çš„è½¯ä»¶ï¼Œå®ƒè¯¯æŠ¥äº†ï¼Œè¯¯æŠ¥ç‡ 100%% çœŸæ˜¯è®©äººä¸æ•¢æ­ç»´å‘¢ã€‚\n"
+           "               æ‰‹åŠ¨æ»‘ç¨½\n\n"
+           "                                                            â€”â€”ä¸€åªæ•´å¤©ä¸çŸ¥é“å¹²å•¥çš„ç‹¸\n\n\n\n\n"
            "               Press any key to continue...");
-    getchar();
-    getchar();
+    refresh();
+    getch();
+    getch();
 
     return 0;
 }
@@ -96,12 +87,13 @@ int welcome (void)
     int i, j;
     int len=strlen(welcome[0]);
 
-    system("cls");
+    clear();
     for (i=0; welcome[0][i]!='\0'; i++) {
         for (j=0; j<15; j++) {
             gotoxy((MAP_X-len+15)/2+i+1, (MAP_Y-15)/2+j+1);
-            putchar(welcome[j][i]);
+            addch(welcome[j][i]);
         }
+	refresh();
         sleepms(10);
     }
     sleepms(1500);
@@ -160,21 +152,28 @@ int saveRecord(int lev, int s, int map)
     score[i].dfclevel=lev;
     score[i].map=map;
 
-    system("cls");
+    clear();
     initSideBar();
 
+    echo();
+    curs_set(1);
+
     gotoxy((MAP_X-28)/2, (MAP_Y-3)/2);
-    printf("============êÇ³Æ============");
+    printw("============æ˜µç§°============");
     gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+1);
-    putchar('>');
+    addch('>');
     gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+2);
-    printf("============================");
+    printw("============================");
     gotoxy((MAP_X-28)/2, (MAP_Y-3)/2+3);
-    printf("ÇëÊäÈëÉÙÓÚ 20 ¸ö×ÖÄ¸»ò 10 ¸öºº×Ö");
+    printw("è¯·è¾“å…¥å°‘äº 20 ä¸ªå­—æ¯æˆ– 10 ä¸ªæ±‰å­—");
+    refresh();
 
     gotoxy((MAP_X-28)/2+3, (MAP_Y-3)/2+1);
-    scanf("%s", score[i].name);
+    scanw("%s", score[i].name);
     score[i].name[20]='\0';
+
+    noecho();
+    curs_set(0);
 
     saveLogFile();
 
@@ -326,3 +325,4 @@ int setMap (int mode)
 
     return 0;
 }
+

@@ -1,22 +1,25 @@
 /*
- *One-way Listed Link Snake Game v0.3.0
- *Using pure C, some windows API
+ *One-way Listed Link Snake Game v0.3.1
+ *Using pure C and ncurses
+ *Cross platform
  *By SDUST weilinfox
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
 #include "snake.h"
 #include "times.h"
-#include <conio.h>
-#include <windows.h>
-#include "frame.h"
-#include "menu.h"
-#include "function.h"
-#include "file.h"
+
+#include <ncurses.h>
+#include <locale.h>
+#include "nframe.h"
+#include "nmenu.h"
+#include "nfunction.h"
+#include "nfile.h"
+#include "kbhitf.h"
+
 
 /** Speed level*/
 int level;
@@ -62,7 +65,14 @@ int main()
     int i, j;
     int countMSecond, foodMSecond, run;
     int replayTime=0;
-    char ch;
+    int ch;
+
+    setlocale(LC_ALL,"");
+
+    initscr();
+    raw();
+    noecho();
+    keypad(stdscr, TRUE);
 
     processStart:
     /*start*/
@@ -76,7 +86,7 @@ int main()
 
     /* gameStart*/
     gameStart:
-    system("cls");
+    clear();
     initSideBar();
     run=1;
     playTime=0;
@@ -93,15 +103,12 @@ int main()
     /*init srand*/
     srand((unsigned int)time(0));
 
-	system("color f0");
-
-	gotoxy(1,1);
     getFrame(frame, map, head);
     for (i=0; i<MAP_Y; i++) {
+	gotoxy(1, i+1);
         for (j=0; j<MAP_X; j++) {
-            putchar(frame[i][j]);
+            addch(isprint(frame[i][j]) ? frame[i][j]: ' ');
         }
-        putchar('\n');
     }
     runtime=clock();
     printSideBarInfo();
@@ -112,22 +119,18 @@ int main()
     switch (ch) {
     case 'w':
     case 'W':
-    case 72:
         head->direction=1;
         break;
     case 's':
     case 'S':
-    case 80:
         head->direction=2;
         break;
     case 'a':
     case 'A':
-    case 75:
         head->direction=3;
         break;
     case 'd':
     case 'D':
-    case 77:
         head->direction=4;
         break;
     }
@@ -136,42 +139,38 @@ int main()
 
     /*int firstPrintSideBarInfo=1;*/
     while (run) {
-        if (kbhit()) {
-            ch=getch();
+	if (ch=kbhit()) {
             switch (ch) {
             case 'w':
             case 'W':
-            case 72:
                 head->direction=1;
                 break;
             case 's':
             case 'S':
-            case 80:
                 head->direction=2;
                 break;
             case 'a':
             case 'A':
-            case 75:
                 head->direction=3;
                 break;
             case 'd':
             case 'D':
-            case 77:
                 head->direction=4;
                 break;
             case 'q':
             case 'Q':
                 gotoxy(1, MAP_Y+1);
-                printf("Quit? (Y)\n\n\n\n\n");
+                printw("Quit? (Y)\n\n\n\n\n");
+		refresh();
                 if ((ch=getch())=='y' || ch=='Y')
                     goto processStart;
                 else {
-                    system("cls");
+                    clear();
                     for (i=0; i<MAP_Y; i++) {
                         for (j=0; j<MAP_X; j++) {
-                            putchar(frame[i][j]);
+                            addch(isprint(frame[i][j]) ? frame[i][j] : ' ');
                         }
-                        putchar('\n');
+                        addch('\n');
                     }
                     initSideBar();
                     printSideBarInfo();
@@ -179,7 +178,8 @@ int main()
                 break;
             }
             ch=0;
-        }
+	}
+
         playTime++;
         countMSecond++;
         foodMSecond++;
@@ -217,8 +217,8 @@ int main()
                     head->x=0;
                 break;
             default:
-                MessageBox(NULL,"Undefined direction at running!","ERROR!",MB_OK);
-                exit(1);
+                //MessageBox(NULL,"Undefined direction at running!","ERROR!",MB_OK);
+                exit(15);
             }
             while (node!=NULL) {
                 tx=node->x;
@@ -239,28 +239,30 @@ int main()
                 run=0;
                 continue;
             } else {
-                /*system("cls");*/
+                /*system("clear");*/
                 gotoxy(1, 1);
                 getFrame(frame, map, head);
                 printFrame(frame);
                 countMSecond=0;
                 if (foodF) {
                     gotoxy(foodX+1, foodY+1);
-                    putchar('*');
+                    addch('*');
                 }
+		refresh();
             }
         }
         /*print food*/
         if (foodPrint(foodMSecond)) {
-            /*system("cls");*/
+            /*system("clear");*/
             gotoxy(foodX+1, foodY+1);
             if (foodF) {
-                putchar('*');
+                addch('*');
                 foodF=!foodF;
             } else {
-                putchar(' ');
+                addch(' ');
                 foodF=!foodF;
             }
+	    refresh();
 
             foodMSecond=0;
         }
@@ -293,8 +295,8 @@ int main()
                     tail->y=preNode->y;
                     break;
                 default:
-                    MessageBox(NULL,"Undefined direction at adding node!","ERROR!",MB_OK);
-					exit(1);
+                    //MessageBox(NULL,"Undefined direction at adding node!","ERROR!",MB_OK);
+                    exit(1);
                 }
             }
             printSideBarInfo();
@@ -305,26 +307,44 @@ int main()
         sleepms(1);
 
         if (length>40 && win) {
-            system("color 0f");
-            gotoxy(1, MAP_Y+1);
-            printf("Win!\n\n\n\n\n");
+            gotoxy((MAP_X-40)/2, (MAP_Y-5)/2);
+	    printw("========================================");
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+1);
+            printw("                   Win!");
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+3);
+	    printw("========================================");
             run=0;
-        }
+            refresh();
+	}
     }
 
-    gotoxy(1, MAP_Y+1);
+    sleepms(1000);
+    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2);
+    printw("========================================");
     if (!run && length<=40 && win) {
-        system("color 0f");
-        printf("Game over!\n\n\n\n\n");
+        gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+1);
+	printw("               Game over!");
+	gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+2);
+	printw("========================================");
+	refresh();
         sleepms(1500);
     } else if (!win) {
-        system("color 0f");
-        printf("I believe you will make a difference!\n");
-        if (brRecord(dfclevel, (length-5)*2)) {
-            printf("You have break a recored!!!!!\n!!!!!\n!!!!!\nJust wait a minute.\n");
-            saveRecord(dfclevel, (length-5)*2, mapNo);
+        gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+1);
+        printw(" I believe you will make a difference!!");
+        if (brRecord(dfclevel, (length-5)*2) && dfclevel>0) {
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+2);
+            printw("      You have break a recored!!!!!");
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+4);
+	    printw("          Just wait a minute.");
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+6);
+	    printw("========================================");
+            refresh();
+	    sleepms(2000);
+	    saveRecord(dfclevel, (length-5)*2, mapNo);
         } else {
-            printf("\n\n\n\n");
+	    gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+2);
+            printw("========================================");
+	    refresh();
             sleepms(1500);
         }
     }
@@ -333,9 +353,11 @@ int main()
 
     if (length>40 && win && dfclevel<3) {
         dfclevel++;
-        printf("Upgraded!\n\n\n");
+        gotoxy((MAP_X-40)/2, (MAP_Y-5)/2+1);
+        printw("                 Upgraded!");
+        refresh();
         saveModeFile();
-        sleepms(500);
+        sleepms(800);
         goto gameStart;
     }
 
@@ -345,6 +367,8 @@ int main()
         goto gameStart;
     else
         goto processStart;
+
+    endwin();
 
     return 0;
 }
